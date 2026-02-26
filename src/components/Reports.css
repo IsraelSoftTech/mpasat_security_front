@@ -1,0 +1,268 @@
+.reports-page {
+  max-width: 900px;
+}
+
+.reports-header {
+  margin-bottom: 1.5rem;
+}
+
+.reports-header h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.reports-header p {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.reports-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.report-date label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.report-date input {
+  padding: 0.6rem 0.875rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.report-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-export {
+  padding: 0.6rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+
+.btn-export:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-pdf {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-excel {
+  background: #166534;
+  color: white;
+}
+
+.btn-pdf:hover:not(:disabled),
+.btn-excel:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.reports-error {
+  padding: 0.75rem 1rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.reports-loading {
+  padding: 2rem;
+  text-align: center;
+  color: #64748b;
+}
+
+.report-summary {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-card {
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.summary-card .value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.summary-card .label {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.summary-card.present {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.summary-card.late {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.summary-card.absent {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.summary-card.total {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.report-tables {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.report-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.report-section .empty {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.report-table th,
+.report-table td {
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.report-table th {
+  font-weight: 600;
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.report-table .status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.report-table .status-badge.present {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.report-table .status-badge.late {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+@media (max-width: 768px) {
+  .reports-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .reports-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .report-date {
+    width: 100%;
+  }
+
+  .report-date input {
+    width: 100%;
+  }
+
+  .report-actions {
+    flex-wrap: wrap;
+  }
+
+  .btn-export {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .report-summary {
+    padding: 1.25rem;
+  }
+
+  .summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .summary-card .value {
+    font-size: 1.35rem;
+  }
+
+  .report-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .report-table {
+    min-width: 600px;
+    font-size: 0.85rem;
+  }
+
+  .report-table th,
+  .report-table td {
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .report-summary {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,161 @@
+.school-times {
+  max-width: 600px;
+}
+
+.school-times-header {
+  margin-bottom: 1.5rem;
+}
+
+.school-times-header h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.school-times-header p {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.school-times-form {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.time-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.time-picker select {
+  padding: 0.6rem 0.5rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+}
+
+.time-picker select:focus {
+  outline: none;
+  border-color: #0d4f8b;
+}
+
+.time-sep {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: #0d4f8b;
+  box-shadow: 0 0 0 2px rgba(13, 79, 139, 0.15);
+}
+
+.time-am-pm {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0d4f8b;
+  margin-top: 0.35rem;
+}
+
+.field-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 0.35rem;
+}
+
+.school-times-message {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.school-times-message.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.school-times-message.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.school-times-info {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.school-times-info h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.school-times-info ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.submit-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: white;
+  background: linear-gradient(135deg, #0d4f8b 0%, #0a3d6b 100%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submit-btn:hover:not(:disabled) {
+  opacity: 0.95;
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.school-times-loading {
+  padding: 2rem;
+  text-align: center;
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

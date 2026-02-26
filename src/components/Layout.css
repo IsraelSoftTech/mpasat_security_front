@@ -1,0 +1,390 @@
+.layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 60px 1fr;
+  grid-template-areas:
+    'topbar topbar'
+    'sidebar main';
+}
+
+/* Top bar */
+.topbar {
+  grid-area: topbar;
+  background: linear-gradient(135deg, #0d4f8b 0%, #0a3d6b 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topbar-logo {
+  height: 36px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.topbar-year-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.topbar-year-select label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.topbar-year-dropdown {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  font-weight: 500;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.topbar-year-dropdown option {
+  color: #1e293b;
+  background: white;
+}
+
+.topbar-year-dropdown:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.topbar-logout {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.topbar-logout:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.topbar-menu-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.topbar-menu-icon {
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.sidebar-close {
+  display: none;
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: #64748b;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.topbar-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* Sidebar */
+.sidebar {
+  grid-area: sidebar;
+  background: #f1f5f9;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e2e8f0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  margin: 0 0.5rem;
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.sidebar-item:hover {
+  color: #0d4f8b;
+  background: rgba(13, 79, 139, 0.08);
+}
+
+.sidebar-item.active {
+  color: #0d4f8b;
+  background: rgba(13, 79, 139, 0.12);
+  box-shadow: none;
+}
+
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: #0d4f8b;
+  border-radius: 0 4px 4px 0;
+}
+
+.sidebar-icon {
+  font-size: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  display: block;
+}
+
+.sidebar-label {
+  flex: 1;
+}
+
+.sidebar-chevron {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  transition: transform 0.2s;
+}
+
+.sidebar-chevron.expanded {
+  transform: rotate(180deg);
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.sidebar-submenu {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid #cbd5e1;
+}
+
+.sidebar-submenu .sidebar-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.sidebar-submenu .sidebar-item::before {
+  display: none;
+}
+
+/* Main content */
+.layout-main {
+  grid-area: main;
+  background: #f8fafc;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.placeholder-page {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid #e2e8f0;
+}
+
+.placeholder-page h2 {
+  font-size: 1.25rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.placeholder-page p {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .topbar-year-select label {
+    display: none;
+  }
+
+  .topbar-year-dropdown {
+    min-width: 110px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px 1fr;
+    grid-template-areas:
+      'topbar'
+      'main';
+  }
+
+  .topbar {
+    padding: 0 1rem;
+  }
+
+  .topbar-menu-btn {
+    display: flex;
+  }
+
+  .topbar-name {
+    font-size: 1rem;
+  }
+
+  .topbar-logo {
+    height: 28px;
+  }
+
+.topbar-right {
+  gap: 0.5rem;
+}
+
+.topbar-year-dropdown {
+  min-width: 100px;
+  font-size: 0.85rem;
+}
+
+.topbar-logout {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: none;
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-nav {
+    padding-top: 3rem;
+    flex-direction: column;
+  }
+
+  .sidebar-item {
+    justify-content: flex-start;
+    min-width: auto;
+  }
+
+  .sidebar-item.active::before {
+    left: 0;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .layout-main {
+    padding: 1rem;
+  }
+
+  .placeholder-page {
+    padding: 1.25rem;
+  }
+
+  .placeholder-page h2 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-name {
+    font-size: 0.9rem;
+  }
+
+  .layout-main {
+    padding: 0.75rem;
+  }
+}
