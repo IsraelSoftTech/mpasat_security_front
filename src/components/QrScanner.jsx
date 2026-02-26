@@ -9,8 +9,9 @@ function QrScanner() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const processingRef = useRef(false)
-  const lastScannedRef = useRef({ id: null, time: 0 })
+  const lastScannedRef = useRef({ id: null, time: 0, successBlock: false })
   const html5QrRef = useRef(null)
+  const [successToast, setSuccessToast] = useState(null)
 
   useEffect(() => {
     return () => {
@@ -41,9 +42,13 @@ function QrScanner() {
           const id = decodedText.trim()
           const now = Date.now()
           if (processingRef.current) return
-          if (lastScannedRef.current.id === id && now - lastScannedRef.current.time < 1500) return
+          const { id: lastId, time: lastTime, successBlock } = lastScannedRef.current
+          if (lastId === id) {
+            if (successBlock && now - lastTime < 60 * 60 * 1000) return
+            if (!successBlock && now - lastTime < 1500) return
+          }
           processingRef.current = true
-          lastScannedRef.current = { id, time: now }
+          lastScannedRef.current = { id, time: now, successBlock: false }
           handleScan(id).finally(() => {
             processingRef.current = false
           })
@@ -89,12 +94,21 @@ function QrScanner() {
       const data = await res.json()
 
       if (data.success) {
+        lastScannedRef.current = { id: qrData, time: Date.now(), successBlock: true }
         const isTeacher = data.person_type === 'teacher'
         const last = isTeacher
           ? { name: data.name, class: data.class, check_in_type: data.check_in_type, check_in_time: data.check_in_time, status: data.status, minutes_late: data.minutes_late }
           : (Array.isArray(data.attendance) ? data.attendance[data.attendance.length - 1] : data.attendance)
         const typeLabel = last?.check_in_type === 'departure' ? 'Departure' : 'Arrival'
         const lateInfo = last?.minutes_late ? ` (${last.minutes_late} min)` : ''
+        const toastData = {
+          name: last?.name,
+          class: last?.class || 'Teacher',
+          type: typeLabel,
+          time: String(last?.check_in_time || '').slice(0, 5),
+          lateInfo: isTeacher ? '' : lateInfo,
+          status: last?.status,
+        }
         setLastResult({
           success: true,
           name: last?.name,
@@ -104,6 +118,10 @@ function QrScanner() {
           type: typeLabel,
           lateInfo: isTeacher ? '' : lateInfo,
         })
+        setSuccessToast(toastData)
+        setTimeout(() => setSuccessToast((t) => (t ? { ...t, exiting: true } : null)), 2000)
+        setTimeout(() => setSuccessToast(null), 2600)
+        stopScanner()
       } else {
         setLastResult({ success: false, message: data.message })
       }
@@ -116,6 +134,20 @@ function QrScanner() {
 
   return (
     <div className="qr-scanner-page">
+      {successToast && (
+        <div className={`scan-success-toast ${successToast.exiting ? 'exiting' : ''}`}>
+          <span className="toast-icon">✓</span>
+          <div className="toast-content">
+            <strong>{successToast.name}</strong>
+            <span>{successToast.class} · {successToast.type} at {successToast.time}{successToast.lateInfo}</span>
+            {successToast.type === 'Arrival' && successToast.status && (
+              <span className={`toast-status ${successToast.status}`}>
+                {successToast.status === 'late' ? 'Late' : 'Present'}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
       <div className="scanner-header">
         <h2>Scan QR Code</h2>
         <p>Use camera to scan student or teacher QR codes for check-in</p>
