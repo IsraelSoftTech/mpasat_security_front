@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { API_BASE } from '../api'
 import logo from '../assets/logo.png'
 import './Login.css'
 
@@ -15,7 +16,7 @@ function Login({ onLoginSuccess }) {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

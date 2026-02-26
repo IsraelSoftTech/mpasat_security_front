@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAcademicYear } from '../context/AcademicYearContext'
+import { API_BASE } from '../api'
 import './Dashboard.css'
 
 function Dashboard() {
@@ -17,8 +18,8 @@ function Dashboard() {
   async function fetchData() {
     try {
       const url = selectedYearId
-        ? `/api/attendance/stats?academic_year_id=${selectedYearId}`
-        : '/api/attendance/stats'
+        ? `${API_BASE}/api/attendance/stats?academic_year_id=${selectedYearId}`
+        : `${API_BASE}/api/attendance/stats`
       const res = await fetch(url)
       const data = await res.json()
       if (data.success) {

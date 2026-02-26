@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { IconEdit, IconTrash } from './Icons'
 import { useAcademicYear } from '../context/AcademicYearContext'
+import { API_BASE } from '../api'
 import './ManageClasses.css'
 
 function AcademicYears() {
@@ -27,7 +28,7 @@ function AcademicYears() {
 
   async function loadYears() {
     try {
-      const res = await fetch('/api/academic-years')
+      const res = await fetch(`${API_BASE}/api/academic-years`)
       const data = await res.json()
       if (data.success) setYears(data.academic_years || [])
     } catch {
@@ -49,7 +50,7 @@ function AcademicYears() {
     setSuccess('')
 
     try {
-      const res = await fetch('/api/academic-years', {
+      const res = await fetch(`${API_BASE}/api/academic-years`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -94,7 +95,7 @@ function AcademicYears() {
 
     setLoading(true)
     try {
-      const res = await fetch(`/api/academic-years/${editingYear.id}`, {
+      const res = await fetch(`${API_BASE}/api/academic-years/${editingYear.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -130,7 +131,7 @@ function AcademicYears() {
 
     setLoading(true)
     try {
-      const res = await fetch(`/api/academic-years/${deleteConfirm.id}`, { method: 'DELETE' })
+      const res = await fetch(`${API_BASE}/api/academic-years/${deleteConfirm.id}`, { method: 'DELETE' })
       const data = await res.json()
       if (data.success) {
         setYears((y) => y.filter((yr) => yr.id !== deleteConfirm.id))

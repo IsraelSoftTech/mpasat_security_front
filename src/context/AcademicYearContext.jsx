@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { API_BASE } from '../api'
 
 const AcademicYearContext = createContext(null)
 
@@ -13,7 +14,7 @@ export function AcademicYearProvider({ children }) {
 
   async function fetchYears() {
     try {
-      const res = await fetch('/api/academic-years')
+      const res = await fetch(`${API_BASE}/api/academic-years`)
       const data = await res.json()
       if (data.success) {
         setAcademicYears(data.academic_years || [])

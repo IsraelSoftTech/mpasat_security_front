@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
+import { API_BASE } from '../api'
 import './QrScanner.css'
 
 function QrScanner() {
@@ -76,7 +77,7 @@ function QrScanner() {
       const deviceTime = new Date()
       const clientDate = deviceTime.toLocaleDateString('en-CA')
       const clientTime = deviceTime.toTimeString().slice(0, 8)
-      const res = await fetch('/api/attendance/checkin', {
+      const res = await fetch(`${API_BASE}/api/attendance/checkin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

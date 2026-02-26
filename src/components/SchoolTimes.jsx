@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { API_BASE } from '../api'
 import './SchoolTimes.css'
 
 function hhmmTo12(hhmm) {
@@ -31,7 +32,7 @@ function SchoolTimes() {
   async function fetchSettings() {
     setLoading(true)
     try {
-      const res = await fetch('/api/settings')
+      const res = await fetch(`${API_BASE}/api/settings`)
       const data = await res.json()
       if (data.success && data.settings) {
         setStart12(hhmmTo12(data.settings.school_start_time || '08:00'))
@@ -51,7 +52,7 @@ function SchoolTimes() {
     setSaving(true)
     setMessage('')
     try {
-      const res = await fetch('/api/settings', {
+      const res = await fetch(`${API_BASE}/api/settings`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

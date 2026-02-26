@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { IconEdit, IconTrash, IconDownload } from './Icons'
 import IdCard, { downloadCardAsImage, downloadCardsAsPdf } from './IdCard'
 import { useAcademicYear } from '../context/AcademicYearContext'
+import { API_BASE } from '../api'
 import './RegisterStudents.css'
 
 const PHONE_REGEX = /^\d{9,15}$/
@@ -128,8 +129,8 @@ function RegisterStudents() {
   async function fetchStudents() {
     try {
       const url = selectedYearId
-        ? `/api/students?academic_year_id=${selectedYearId}`
-        : '/api/students'
+        ? `${API_BASE}/api/students?academic_year_id=${selectedYearId}`
+        : `${API_BASE}/api/students`
       const res = await fetch(url)
       const data = await res.json()
       if (data.success) setStudents(data.students)
@@ -140,7 +141,7 @@ function RegisterStudents() {
 
   async function fetchClasses() {
     try {
-      const res = await fetch('/api/classes')
+      const res = await fetch(`${API_BASE}/api/classes`)
       const data = await res.json()
       if (data.success) setClasses(data.classes)
     } catch {
@@ -189,7 +190,7 @@ function RegisterStudents() {
     setSuccessStudent(null)
 
     try {
-      const res = await fetch('/api/students', {
+      const res = await fetch(`${API_BASE}/api/students`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -256,7 +257,7 @@ function RegisterStudents() {
 
     setLoading(true)
     try {
-      const res = await fetch(`/api/students/${editingStudent.id}`, {
+      const res = await fetch(`${API_BASE}/api/students/${editingStudent.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -285,7 +286,7 @@ function RegisterStudents() {
     if (!deleteConfirm) return
     setLoading(true)
     try {
-      const res = await fetch(`/api/students/${deleteConfirm.id}`, { method: 'DELETE' })
+      const res = await fetch(`${API_BASE}/api/students/${deleteConfirm.id}`, { method: 'DELETE' })
       const data = await res.json()
       if (data.success) {
         setStudents((s) => s.filter((st) => st.id !== deleteConfirm.id))

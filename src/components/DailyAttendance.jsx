@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAcademicYear } from '../context/AcademicYearContext'
+import { API_BASE } from '../api'
 import './DailyAttendance.css'
 
 function DailyAttendance() {
@@ -22,8 +23,8 @@ function DailyAttendance() {
     const yearParam = selectedYearId ? `&academic_year_id=${selectedYearId}` : ''
     try {
       const [statsRes, entriesRes] = await Promise.all([
-        fetch(`/api/attendance/stats?date=${date}${yearParam}`),
-        fetch(`/api/attendance/entries?date=${date}${yearParam}`),
+        fetch(`${API_BASE}/api/attendance/stats?date=${date}${yearParam}`),
+        fetch(`${API_BASE}/api/attendance/entries?date=${date}${yearParam}`),
       ])
       const statsData = await statsRes.json()
       const entriesData = await entriesRes.json()
@@ -55,8 +56,8 @@ function DailyAttendance() {
     setDeleting(true)
     try {
       const url = selectedYearId
-        ? `/api/attendance/all?academic_year_id=${selectedYearId}`
-        : '/api/attendance/all'
+        ? `${API_BASE}/api/attendance/all?academic_year_id=${selectedYearId}`
+        : `${API_BASE}/api/attendance/all`
       const res = await fetch(url, { method: 'DELETE' })
       const data = await res.json()
       if (data.success) {

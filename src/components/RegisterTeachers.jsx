@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { IconEdit, IconTrash, IconDownload } from './Icons'
 import TeacherIdCard, { downloadTeacherCardAsImage, downloadTeacherCardsAsPdf } from './TeacherIdCard'
 import { useAcademicYear } from '../context/AcademicYearContext'
+import { API_BASE } from '../api'
 import './RegisterStudents.css'
 
 const PHONE_REGEX = /^\d{9,15}$/
@@ -93,8 +94,8 @@ function RegisterTeachers() {
   async function fetchTeachers() {
     try {
       const url = selectedYearId
-        ? `/api/teachers?academic_year_id=${selectedYearId}`
-        : '/api/teachers'
+        ? `${API_BASE}/api/teachers?academic_year_id=${selectedYearId}`
+        : `${API_BASE}/api/teachers`
       const res = await fetch(url)
       const data = await res.json()
       if (data.success) setTeachers(data.teachers)
@@ -144,7 +145,7 @@ function RegisterTeachers() {
     setSuccessTeacher(null)
 
     try {
-      const res = await fetch('/api/teachers', {
+      const res = await fetch(`${API_BASE}/api/teachers`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -212,7 +213,7 @@ function RegisterTeachers() {
 
     setLoading(true)
     try {
-      const res = await fetch(`/api/teachers/${editingTeacher.id}`, {
+      const res = await fetch(`${API_BASE}/api/teachers/${editingTeacher.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -242,7 +243,7 @@ function RegisterTeachers() {
     if (!deleteConfirm) return
     setLoading(true)
     try {
-      const res = await fetch(`/api/teachers/${deleteConfirm.id}`, { method: 'DELETE' })
+      const res = await fetch(`${API_BASE}/api/teachers/${deleteConfirm.id}`, { method: 'DELETE' })
       const data = await res.json()
       if (data.success) {
         setTeachers((t) => t.filter((te) => te.id !== deleteConfirm.id))

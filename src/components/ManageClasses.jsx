@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { IconEdit, IconTrash } from './Icons'
+import { API_BASE } from '../api'
 import './ManageClasses.css'
 
 function ManageClasses() {
@@ -20,7 +21,7 @@ function ManageClasses() {
 
   async function fetchClasses() {
     try {
-      const res = await fetch('/api/classes')
+      const res = await fetch(`${API_BASE}/api/classes`)
       const data = await res.json()
       if (data.success) setClasses(data.classes)
     } catch {
@@ -37,7 +38,7 @@ function ManageClasses() {
     setSuccess('')
 
     try {
-      const res = await fetch('/api/classes', {
+      const res = await fetch(`${API_BASE}/api/classes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim(), code: code.trim() }),
@@ -71,7 +72,7 @@ function ManageClasses() {
 
     setLoading(true)
     try {
-      const res = await fetch(`/api/classes/${editingClass.id}`, {
+      const res = await fetch(`${API_BASE}/api/classes/${editingClass.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -104,7 +105,7 @@ function ManageClasses() {
 
     setLoading(true)
     try {
-      const res = await fetch(`/api/classes/${deleteConfirm.id}`, { method: 'DELETE' })
+      const res = await fetch(`${API_BASE}/api/classes/${deleteConfirm.id}`, { method: 'DELETE' })
       const data = await res.json()
       if (data.success) {
         setClasses((c) => c.filter((cls) => cls.id !== deleteConfirm.id))

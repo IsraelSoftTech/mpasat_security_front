@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAcademicYear } from '../context/AcademicYearContext'
+import { API_BASE } from '../api'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import * as XLSX from 'xlsx'
@@ -21,7 +22,7 @@ function Reports() {
     setError('')
     const yearParam = selectedYearId ? `&academic_year_id=${selectedYearId}` : ''
     try {
-      const res = await fetch(`/api/attendance/report?date=${date}${yearParam}`)
+      const res = await fetch(`${API_BASE}/api/attendance/report?date=${date}${yearParam}`)
       const data = await res.json()
       if (data.success) setReport(data)
       else setError(data.message || 'Failed to load')
