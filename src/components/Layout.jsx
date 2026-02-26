@@ -96,6 +96,10 @@ function Layout({ onLogout }) {
 
       <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <button type="button" className="sidebar-close" aria-label="Close menu" onClick={closeSidebar}>×</button>
+        <div className="sidebar-brand">
+          <img src={logo} alt="" className="sidebar-logo" />
+          <span className="sidebar-name">MPASAT SSSAS</span>
+        </div>
         <nav className="sidebar-nav">
           {MENU_ITEMS.map((item) => {
             const IconComponent = item.Icon
@@ -137,6 +141,11 @@ function Layout({ onLogout }) {
               </button>
             )
           })}
+          <div className="sidebar-logout-wrap">
+            <button type="button" className="sidebar-logout" onClick={() => { onLogout(); closeSidebar(); }}>
+              Logout
+            </button>
+          </div>
         </nav>
       </aside>
 
