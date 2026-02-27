@@ -34,9 +34,27 @@
   transition: opacity 0.2s;
 }
 
-.btn-scan {
+.btn-scan,
+.btn-scan-file {
   background: linear-gradient(135deg, #0d4f8b 0%, #0a3d6b 100%);
   color: white;
+}
+
+.btn-scan-file {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+
+.btn-scan-file:hover {
+  opacity: 0.9;
 }
 
 .btn-stop {

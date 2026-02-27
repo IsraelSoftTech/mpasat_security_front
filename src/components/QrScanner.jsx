@@ -12,6 +12,7 @@ function QrScanner() {
   const lastScannedRef = useRef({ id: null, time: 0, successBlock: false })
   const html5QrRef = useRef(null)
   const [successToast, setSuccessToast] = useState(null)
+  const fileInputRef = useRef(null)
 
   useEffect(() => {
     return () => {
@@ -21,44 +22,66 @@ function QrScanner() {
     }
   }, [])
 
-  async function startScanner() {
+  useEffect(() => {
+    if (!scanning) return
+    const el = document.getElementById('qr-reader')
+    if (!el) return
+
+    let cancelled = false
+    const config = { fps: 10, qrbox: { width: 250, height: 250 } }
+    const onSuccess = (decodedText) => {
+      const id = decodedText.trim()
+      const now = Date.now()
+      if (processingRef.current) return
+      const { id: lastId, time: lastTime, successBlock } = lastScannedRef.current
+      if (lastId === id) {
+        if (successBlock && now - lastTime < 60 * 60 * 1000) return
+        if (!successBlock && now - lastTime < 1500) return
+      }
+      processingRef.current = true
+      lastScannedRef.current = { id, time: now, successBlock: false }
+      handleScan(id).finally(() => { processingRef.current = false })
+    }
+
+    async function init() {
+      try {
+        const scanner = new Html5Qrcode('qr-reader')
+        if (cancelled) return
+        html5QrRef.current = scanner
+
+        let cameraIdOrConfig = { facingMode: 'environment' }
+        try {
+          const cameras = await Html5Qrcode.getCameras()
+          if (cameras?.length > 0) {
+            const back = cameras.find((c) => /back|rear|environment/i.test(c.label || ''))
+            cameraIdOrConfig = back?.id || cameras[0].id
+          }
+        } catch {
+          /* fallback to facingMode */
+        }
+
+        await scanner.start(cameraIdOrConfig, config, onSuccess, () => {})
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Could not access camera. Check permissions and try HTTPS.')
+          setScanning(false)
+        }
+      }
+    }
+    init()
+    return () => {
+      cancelled = true
+      if (html5QrRef.current?.isScanning) {
+        html5QrRef.current.stop().catch(() => {})
+        html5QrRef.current = null
+      }
+    }
+  }, [scanning])
+
+  function startScanner() {
     setError('')
     setLastResult(null)
     setScanning(true)
-
-    await new Promise((r) => setTimeout(r, 100))
-
-    try {
-      const scanner = new Html5Qrcode('qr-reader')
-      html5QrRef.current = scanner
-
-      await scanner.start(
-        { facingMode: 'environment' },
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-        },
-        (decodedText) => {
-          const id = decodedText.trim()
-          const now = Date.now()
-          if (processingRef.current) return
-          const { id: lastId, time: lastTime, successBlock } = lastScannedRef.current
-          if (lastId === id) {
-            if (successBlock && now - lastTime < 60 * 60 * 1000) return
-            if (!successBlock && now - lastTime < 1500) return
-          }
-          processingRef.current = true
-          lastScannedRef.current = { id, time: now, successBlock: false }
-          handleScan(id).finally(() => {
-            processingRef.current = false
-          })
-        },
-        () => {}
-      )
-    } catch (err) {
-      setError(err.message || 'Could not access camera. Check permissions.')
-      setScanning(false)
-    }
   }
 
   async function stopScanner() {
@@ -71,6 +94,29 @@ function QrScanner() {
       // ignore
     }
     setScanning(false)
+  }
+
+  async function handleScanFromFile(e) {
+    const file = e?.target?.files?.[0]
+    if (!file) return
+    setError('')
+    setLastResult(null)
+    setLoading(true)
+    try {
+      const scanner = new Html5Qrcode('qr-file-reader')
+      const result = await scanner.scanFileV2(file, false)
+      const qrData = result?.decodedText?.trim()
+      if (qrData) {
+        await handleScan(qrData)
+      } else {
+        setLastResult({ success: false, message: 'No QR code found in image' })
+      }
+    } catch (err) {
+      setLastResult({ success: false, message: err.message || 'Could not read QR code' })
+    } finally {
+      setLoading(false)
+      e.target.value = ''
+    }
   }
 
   async function handleScan(qrData) {
@@ -155,9 +201,21 @@ function QrScanner() {
 
       <div className="scanner-actions">
         {!scanning ? (
-          <button type="button" className="btn-scan" onClick={startScanner}>
-            Start Camera
-          </button>
+          <>
+            <button type="button" className="btn-scan" onClick={startScanner}>
+              Start Camera
+            </button>
+            <label className="btn-scan-file">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleScanFromFile}
+                style={{ display: 'none' }}
+              />
+              Scan from Image
+            </label>
+          </>
         ) : (
           <button type="button" className="btn-stop" onClick={stopScanner}>
             Stop Camera
@@ -172,6 +230,7 @@ function QrScanner() {
           <div id="qr-reader" />
         </div>
       )}
+      <div id="qr-file-reader" style={{ position: 'absolute', left: -9999, width: 1, height: 1, overflow: 'hidden', pointerEvents: 'none' }} aria-hidden="true" />
 
       {lastResult && (
         <div className={`scan-result ${lastResult.success ? 'success' : 'error'}`}>
