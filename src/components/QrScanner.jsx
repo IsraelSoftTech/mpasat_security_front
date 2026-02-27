@@ -13,6 +13,7 @@ function QrScanner() {
   const html5QrRef = useRef(null)
   const [successToast, setSuccessToast] = useState(null)
   const fileInputRef = useRef(null)
+  const photoInputRef = useRef(null)
 
   useEffect(() => {
     return () => {
@@ -137,7 +138,12 @@ function QrScanner() {
           client_time: clientTime,
         }),
       })
-      const data = await res.json()
+      let data
+      try {
+        data = await res.json()
+      } catch {
+        throw new Error(res.ok ? 'Invalid response' : `Server error ${res.status}`)
+      }
 
       if (data.success) {
         lastScannedRef.current = { id: qrData, time: Date.now(), successBlock: true }
@@ -171,8 +177,15 @@ function QrScanner() {
       } else {
         setLastResult({ success: false, message: data.message })
       }
-    } catch {
-      setLastResult({ success: false, message: 'Connection failed' })
+    } catch (err) {
+      const msg = err?.message?.toLowerCase?.() || ''
+      const isNetwork = /failed|network|load|cors|timeout/i.test(msg) || err?.name === 'TypeError'
+      setLastResult({
+        success: false,
+        message: isNetwork
+          ? 'Connection failed. If the backend is sleeping, wait a moment and try again.'
+          : 'Connection failed',
+      })
     } finally {
       setLoading(false)
     }
@@ -213,7 +226,18 @@ function QrScanner() {
                 onChange={handleScanFromFile}
                 style={{ display: 'none' }}
               />
-              Scan from Image
+              Choose Image
+            </label>
+            <label className="btn-scan-file">
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={handleScanFromFile}
+                style={{ display: 'none' }}
+              />
+              Take Photo
             </label>
           </>
         ) : (
